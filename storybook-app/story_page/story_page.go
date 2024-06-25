@@ -59,39 +59,81 @@ func sidebarSearchField() g.Node {
 func sidebarExplorer() g.Node {
 	return Nav(Class("mt-[16px]"),
 		Div(
-			Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] p-[3px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-				lucide.FileText(Class("block w-[14px] p-[1px] ml-[3px] mr-[5px] flex-shrink-0 text-[rgb(255,131,0)]")),
-				Span(g.Text("Document")),
-			)),
+			sidebarExplorerItemDocument(sidebarExplorerItemDocumentProps{
+				text: "Document",
+			}),
+			sidebarExplorerItemDocument(sidebarExplorerItemDocumentProps{
+				text: "Document",
+			}),
 
-			sidebarExplorerSection(),
+			sidebarExplorerSection(sidebarExplorerSectionProps{
+				text: "Section",
+			}),
 
-			Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] p-[3px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-				Span(Class("mt-[4px] mr-[7px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent rotate-90")),
-				lucide.Box(Class("block w-[14px] p-[1px] ml-[3px] mr-[5px] flex-shrink-0 text-[rgb(30,167,253)]")),
-				Span(g.Text("Component")),
-			)),
+			sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
+				text: "Component",
+			}),
+			sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
+				text: "Component",
+			}),
 
-			Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] p-[3px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-				Span(Class("mt-[4px] mr-[7px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
-				lucide.Box(Class("block w-[14px] p-[1px] ml-[3px] mr-[5px] flex-shrink-0 text-[rgb(30,167,253)]")),
-				Span(g.Text("Component")),
-			)),
-
-			Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] p-[3px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-				Span(Class("ml-[28px]")),
-				lucide.Bookmark(Class("block w-[14px] p-[1px] ml-[3px] mr-[5px] flex-shrink-0 text-[rgb(30,167,253)]")),
-				Span(g.Text("Example")),
-			)),
+			sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
+				text: "Story",
+			}),
+			sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
+				text: "Story",
+			}),
 		),
 	)
 }
 
-func sidebarExplorerSection() g.Node {
-	return Div(Class("flex items-center mt-[16px] mb-[4px] _px-[20px] min-h-[20px]"),
-		Span(Class("mt-[4px] mr-[7px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent rotate-90")),
-		Button(Class("text-[rgb(153,153,153)] uppercase tracking-[0.35em] text-[11px] leading-[16px] font-[900]"), g.Text("Components")),
+type sidebarExplorerSectionProps struct {
+	text string
+}
+
+func sidebarExplorerSection(props sidebarExplorerSectionProps) g.Node {
+	return Div(Class("flex items-center mt-[16px] mb-[4px] min-h-[20px]"),
+		Span(Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		Button(Class("ml-[6px] text-[rgb(153,153,153)] uppercase tracking-[0.35em] text-[11px] leading-[16px] font-[900]"),
+			g.Text(props.text),
+		),
 	)
+}
+
+type sidebarExplorerItemDocumentProps struct {
+	text string
+}
+
+func sidebarExplorerItemDocument(props sidebarExplorerItemDocumentProps) g.Node {
+	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+		Span(Class("invisible mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		lucide.FileText(Class("block w-[14px] p-[1px] ml-[5px] mr-[6px] flex-shrink-0 text-[rgb(255,131,0)]")),
+		Span(g.Text(props.text)),
+	))
+}
+
+type sidebarExplorerItemComponentProps struct {
+	text string
+}
+
+func sidebarExplorerItemComponent(props sidebarExplorerItemComponentProps) g.Node {
+	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+		Span(Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		lucide.Grid2x2(Class("block w-[14px] p-[1px] ml-[5px] mr-[6px] flex-shrink-0 text-[rgb(30,167,253)]")),
+		Span(g.Text(props.text)),
+	))
+}
+
+type sidebarExplorerItemStoryProps struct {
+	text string
+}
+
+func sidebarExplorerItemStory(props sidebarExplorerItemStoryProps) g.Node {
+	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+		Span(Class("ml-[22px]")),
+		lucide.Bookmark(Class("block w-[14px] p-[1px] ml-[5px] mr-[6px] flex-shrink-0 text-[rgb(55,213,211)]")),
+		Span(g.Text(props.text)),
+	))
 }
 
 func toolbar() g.Node {
