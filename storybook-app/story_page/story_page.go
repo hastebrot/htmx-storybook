@@ -67,33 +67,46 @@ func sidebarExplorer() g.Node {
 			}),
 
 			sidebarExplorerSection(sidebarExplorerSectionProps{
-				text: "Section",
+				text:       "Section",
+				isExpanded: false,
+			}),
+			sidebarExplorerSection(sidebarExplorerSectionProps{
+				text:       "Section",
+				isExpanded: true,
 			}),
 
 			sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
-				text: "Component",
+				text:       "Component",
+				isExpanded: false,
 			}),
 			sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
-				text: "Component",
+				text:       "Component",
+				isExpanded: true,
 			}),
 
 			sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
-				text: "Story",
+				text:     "Story",
+				isActive: true,
 			}),
 			sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
-				text: "Story",
+				text:     "Story",
+				isActive: false,
 			}),
 		),
 	)
 }
 
 type sidebarExplorerSectionProps struct {
-	text string
+	text       string
+	isExpanded bool
 }
 
 func sidebarExplorerSection(props sidebarExplorerSectionProps) g.Node {
 	return Div(Class("flex items-center mt-[16px] mb-[4px] min-h-[20px]"),
-		Span(Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		Span(Classes(
+			g.If(props.isExpanded, Class("rotate-90")),
+			Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		),
 		Button(Class("ml-[6px] text-[rgb(153,153,153)] uppercase tracking-[0.35em] text-[11px] leading-[16px] font-[900]"),
 			g.Text(props.text),
 		),
@@ -113,25 +126,40 @@ func sidebarExplorerItemDocument(props sidebarExplorerItemDocumentProps) g.Node 
 }
 
 type sidebarExplorerItemComponentProps struct {
-	text string
+	text       string
+	isExpanded bool
 }
 
 func sidebarExplorerItemComponent(props sidebarExplorerItemComponentProps) g.Node {
 	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-		Span(Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
-		lucide.Grid2x2(Class("block w-[14px] p-[1px] ml-[5px] mr-[6px] flex-shrink-0 text-[rgb(30,167,253)]")),
+		Span(Classes(
+			g.If(props.isExpanded, Class("rotate-90")),
+			Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		),
+		Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(30,167,253)]"),
+			lucide.Grid2x2(Class("block w-[14px] flex-shrink-0")),
+		),
 		Span(g.Text(props.text)),
 	))
 }
 
 type sidebarExplorerItemStoryProps struct {
-	text string
+	text     string
+	isActive bool
 }
 
 func sidebarExplorerItemStory(props sidebarExplorerItemStoryProps) g.Node {
-	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+	return Div(A(Classes(
+		Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+		g.If(props.isActive, Class("bg-[rgb(30,167,253)] hover:!bg-[rgb(30,167,253)] text-[rgb(255,255,255)] font-[600]")),
+	),
 		Span(Class("ml-[22px]")),
-		lucide.Bookmark(Class("block w-[14px] p-[1px] ml-[5px] mr-[6px] flex-shrink-0 text-[rgb(55,213,211)]")),
+		Span(Classes(
+			Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(55,213,211)]"),
+			g.If(props.isActive, Class("text-[rgb(255,255,255)]")),
+		),
+			lucide.Bookmark(Class("block w-[14px] flex-shrink-0")),
+		),
 		Span(g.Text(props.text)),
 	))
 }
@@ -149,6 +177,7 @@ func toolbar() g.Node {
 				toolbarIconButton(lucide.Search(Class("w-[16px]"))),
 			),
 			Div(Class("flex whitespace-nowrap shrink-0 ml-[30px] mr-[3px]"),
+				toolbarIconButton(lucide.Fullscreen(Class("w-[16px]"))),
 				toolbarIconButton(lucide.ExternalLink(Class("w-[16px]"))),
 			),
 		),
