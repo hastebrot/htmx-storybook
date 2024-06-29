@@ -3,6 +3,7 @@ package onyx_button
 import (
 	"github.com/hastebrot/gomponents-lucide/lucide"
 	g "github.com/maragudk/gomponents"
+	hx "github.com/maragudk/gomponents-htmx"
 	. "github.com/maragudk/gomponents/html"
 
 	. "storybook-app/helper"
@@ -38,10 +39,66 @@ func sidebarHeader() g.Node {
 		),
 		Div(Class("inline-block cursor-pointer"),
 			Button(Class("rounded-[3em] cursor-pointer flex items-center justify-center text-[rgba(51,51,51,0.7)] p-[7px] [box-shadow:rgba(51,51,51,0.2)_0_0_0_1px_inset] hover:[box-shadow:rgba(51,51,51,0.5)_0_0_0_1px_inset]"),
+				Type("button"),
+				g.Attr("popovertarget", "sidebarExplorerPopover"),
+				hx.On("click", "htmx.showPopover(event, htmx.find('#sidebarExplorerPopover'))"),
 				lucide.MoreHorizontal(Class("w-[14px] [stroke-width:3px]")),
 			),
 		),
+		Div(
+			ID("sidebarExplorerPopover"),
+			Classes(
+				Class("rounded-[8px] absolute z-20 m-0 p-0 min-w-[220px] max-h-[440px]"),
+				Class("backdrop:bg-transparent bg-[rgba(255,255,255,0.95)]"),
+			),
+			Style("box-shadow: 0px 5px 5px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);"),
+			// Style("filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.05)) drop-shadow(0 1px 3px rgba(0,0,0,0.1));"),
+			g.Attr("popover"),
+			Div(
+				sidebarHeaderMenuItem(sidebarHeaderMenuItemProps{
+					text:     "About your Storybook",
+					iconSlot: lucide.Info(Class("w-[14px]")),
+				}),
+				sidebarHeaderMenuItem(sidebarHeaderMenuItemProps{
+					text:     "Documentation",
+					iconSlot: lucide.ExternalLink(Class("w-[14px]")),
+				}),
+				Div(Class("border-b-[4px] border-[rgb(201,214,224)]")),
+				sidebarHeaderMenuItem(sidebarHeaderMenuItemProps{
+					text:       "Show sidebar",
+					iconSlot:   lucide.Check(Class("w-[14px]")),
+					isSelected: true,
+				}),
+				sidebarHeaderMenuItem(sidebarHeaderMenuItemProps{
+					text:       "Show toolbar",
+					iconSlot:   lucide.Check(Class("w-[14px]")),
+					isSelected: true,
+				}),
+			),
+		),
 	))
+}
+
+type sidebarHeaderMenuItemProps struct {
+	text       string
+	iconSlot   g.Node
+	isSelected bool
+}
+
+func sidebarHeaderMenuItem(props sidebarHeaderMenuItemProps) g.Node {
+	return A(Classes(
+		Class("text-[12px] leading-[18px] cursor-pointer select-none flex items-center justify-between p-[7px_10px]"),
+		Class("hover:bg-[rgba(2,156,253,0.1)] text-[#5C6870]"),
+		g.If(props.isSelected, Class("text-[#029CFD] font-[600]")),
+	),
+		hx.On("click", "htmx.hidePopover(event, htmx.find('#sidebarExplorerPopover'))"),
+		Span(Class("flex"),
+			props.iconSlot,
+		),
+		Span(Class("flex flex-col flex-1 pl-[10px]"),
+			g.Text(props.text),
+		),
+	)
 }
 
 func sidebarSearchField() g.Node {
@@ -120,7 +177,9 @@ type sidebarExplorerItemDocumentProps struct {
 func sidebarExplorerItemDocument(props sidebarExplorerItemDocumentProps) g.Node {
 	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
 		Span(Class("invisible mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
-		lucide.FileText(Class("block w-[14px] p-[1px] ml-[5px] mr-[6px] flex-shrink-0 text-[rgb(255,131,0)]")),
+		Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(255,131,0)]"),
+			lucide.FileText(Class("block w-[14px] flex-shrink-0")),
+		),
 		Span(g.Text(props.text)),
 	))
 }

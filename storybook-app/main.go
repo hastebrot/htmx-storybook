@@ -101,6 +101,7 @@ func handlerIndex(writer http.ResponseWriter, req *http.Request) {
 				Script(Src("https://unpkg.com/idiomorph@0.3.0/dist/idiomorph-ext.min.js"), g.Attr("crossorigin", "anonymous")),
 				// Enable hover and active states on touchscreens, https://stackoverflow.com/a/56140328
 				Script(g.Raw("document.addEventListener(\"touchstart\", function () {}, true);")),
+				Script(g.Raw(htmxScript)),
 			),
 			Body(Classes(
 				Class("grid m-0 min-h-[100vh]"),
@@ -154,3 +155,59 @@ func handlerSiteRefresh(writer http.ResponseWriter, req *http.Request) {
 	}
 	writer.WriteHeader(http.StatusOK)
 }
+
+const htmxScript string = `
+htmx.onLoad(() => {
+	const positionLeftBottom = (trigger, container) => {
+		const triggerRect = trigger.getBoundingClientRect();
+		const offsetLeft = 0;
+		const offsetTop = window.scrollY;
+		container.style.left = triggerRect.left + offsetLeft + "px";
+		container.style.top = triggerRect.bottom + offsetTop + "px";
+	}
+
+	const positionCenterBottom = (trigger, container) => {
+		const triggerRect = trigger.getBoundingClientRect();
+		const containerRect = container.getBoundingClientRect();
+		const offsetLeft = -(containerRect.width / 2);
+		const offsetTop = window.scrollY + 8;
+		container.style.left = triggerRect.left + offsetLeft + "px";
+		container.style.top = triggerRect.bottom + offsetTop + "px";
+	}
+
+	htmx.showDialog = (event, dialog) => {
+		dialog.showModal();
+		const button = event.currentTarget;
+		if (button) {
+			positionLeftBottom(button, dialog);
+		}
+	};
+
+	htmx.hideDialog = (event, dialog) => {
+		const maybeDialog = event.target;
+		if (maybeDialog === dialog) {
+			dialog.close();
+		}
+	};
+
+	htmx.showPopover = (event, popover) => {
+		// popover.showPopover();
+		const button = event.currentTarget;
+		const handleToggleEvent = (event) => {
+			popover.removeEventListener("toggle", handleToggleEvent);
+			if (button) {
+				positionCenterBottom(button, popover);
+			}
+		}
+		popover.addEventListener("toggle", handleToggleEvent);
+	}
+
+	htmx.hidePopover = (event, popover) => {
+		popover.hidePopover();
+		const maybePopover = event.target;
+		if (maybePopover === popover) {
+			popover.hidePopover();
+		}
+	};
+});
+`
