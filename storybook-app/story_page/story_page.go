@@ -1,4 +1,4 @@
-package onyx_button
+package story_page
 
 import (
 	"github.com/hastebrot/gomponents-lucide/lucide"
@@ -123,12 +123,12 @@ func sidebarExplorer() g.Node {
 				text: "Document",
 			}),
 
-			sidebarExplorerSection(sidebarExplorerSectionProps{
-				text:       "Section",
+			sidebarExplorerCategory(sidebarExplorerCategoryProps{
+				text:       "Category",
 				isExpanded: false,
 			}),
-			sidebarExplorerSection(sidebarExplorerSectionProps{
-				text:       "Section",
+			sidebarExplorerCategory(sidebarExplorerCategoryProps{
+				text:       "Category",
 				isExpanded: true,
 			}),
 
@@ -149,16 +149,25 @@ func sidebarExplorer() g.Node {
 				text:     "Story",
 				isActive: false,
 			}),
+
+			sidebarExplorerItemFolder(sidebarExplorerItemFolderProps{
+				text:       "Folder",
+				isExpanded: false,
+			}),
+			sidebarExplorerItemFolder(sidebarExplorerItemFolderProps{
+				text:       "Folder",
+				isExpanded: true,
+			}),
 		),
 	)
 }
 
-type sidebarExplorerSectionProps struct {
+type sidebarExplorerCategoryProps struct {
 	text       string
 	isExpanded bool
 }
 
-func sidebarExplorerSection(props sidebarExplorerSectionProps) g.Node {
+func sidebarExplorerCategory(props sidebarExplorerCategoryProps) g.Node {
 	return Div(Class("flex items-center mt-[16px] mb-[4px] min-h-[20px]"),
 		Span(Classes(
 			g.If(props.isExpanded, Class("rotate-90")),
@@ -218,6 +227,24 @@ func sidebarExplorerItemStory(props sidebarExplorerItemStoryProps) g.Node {
 			g.If(props.isActive, Class("text-[rgb(255,255,255)]")),
 		),
 			lucide.Bookmark(Class("block w-[14px] flex-shrink-0")),
+		),
+		Span(g.Text(props.text)),
+	))
+}
+
+type sidebarExplorerItemFolderProps struct {
+	text       string
+	isExpanded bool
+}
+
+func sidebarExplorerItemFolder(props sidebarExplorerItemFolderProps) g.Node {
+	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+		Span(Classes(
+			g.If(props.isExpanded, Class("rotate-90")),
+			Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+		),
+		Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(119,77,215)]"),
+			lucide.Folder(Class("block w-[14px] flex-shrink-0")),
 		),
 		Span(g.Text(props.text)),
 	))

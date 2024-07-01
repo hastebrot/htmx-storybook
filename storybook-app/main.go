@@ -156,7 +156,7 @@ func handlerSiteRefresh(writer http.ResponseWriter, req *http.Request) {
 	writer.WriteHeader(http.StatusOK)
 }
 
-const htmxScript string = `
+const htmxScript string = /* javascript */ `
 htmx.onLoad(() => {
 	const positionLeftBottom = (trigger, container) => {
 		const triggerRect = trigger.getBoundingClientRect();
@@ -164,7 +164,7 @@ htmx.onLoad(() => {
 		const offsetTop = window.scrollY;
 		container.style.left = triggerRect.left + offsetLeft + "px";
 		container.style.top = triggerRect.bottom + offsetTop + "px";
-	}
+	};
 
 	const positionCenterBottom = (trigger, container) => {
 		const triggerRect = trigger.getBoundingClientRect();
@@ -173,7 +173,7 @@ htmx.onLoad(() => {
 		const offsetTop = window.scrollY + 8;
 		container.style.left = triggerRect.left + offsetLeft + "px";
 		container.style.top = triggerRect.bottom + offsetTop + "px";
-	}
+	};
 
 	htmx.showDialog = (event, dialog) => {
 		dialog.showModal();
@@ -198,7 +198,7 @@ htmx.onLoad(() => {
 			if (button) {
 				positionCenterBottom(button, popover);
 			}
-		}
+		};
 		popover.addEventListener("toggle", handleToggleEvent);
 	}
 
