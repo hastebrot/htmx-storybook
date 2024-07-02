@@ -7,12 +7,58 @@ import (
 	. "github.com/maragudk/gomponents/html"
 
 	. "storybook-app/helper"
+	. "storybook-app/model"
 )
 
 func StoryPage() g.Node {
+	menu := MenuRoot{
+		MenuItems: []MenuItem{
+			{
+				Text: "Document",
+				Type: TypeDocument,
+			},
+			{
+				Text: "Category",
+				Type: TypeCategory,
+				MenuItems: []MenuItem{
+					{
+						Text: "Component",
+						Type: TypeComponent,
+						MenuItems: []MenuItem{
+							{
+								Text: "Story",
+								Type: TypeStory,
+							},
+						},
+					},
+					{
+						Text: "Folder",
+						Type: TypeFolder,
+						MenuItems: []MenuItem{
+							{
+								Text: "Document",
+								Type: TypeDocument,
+							},
+							{
+								Text: "Component",
+								Type: TypeComponent,
+								MenuItems: []MenuItem{
+									{
+										Text: "Story",
+										Type: TypeStory,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
 	return Div(Classes(Class("grid grid-cols-[auto_1fr] bg-[#F7F9FC]")),
 		Div(Class("flex flex-col w-[250px] overflow-y-scroll"),
-			sidebar(),
+			sidebar(menu),
 		),
 		Div(Class("p-[10px] pl-0 flex flex-col"),
 			Div(
@@ -24,11 +70,11 @@ func StoryPage() g.Node {
 	)
 }
 
-func sidebar() g.Node {
+func sidebar(menu MenuRoot) g.Node {
 	return Div(Class("p-[20px] w-full h-full flex flex-col"),
 		sidebarHeader(),
 		sidebarSearchField(),
-		sidebarExplorer(),
+		sidebarExplorer(menu),
 	)
 }
 
@@ -113,53 +159,64 @@ func sidebarSearchField() g.Node {
 	)
 }
 
-func sidebarExplorer() g.Node {
+func sidebarExplorer(menu MenuRoot) g.Node {
+	menuItems := collectMenuItemsFromRoot(menu)
+
 	return Nav(Class("mt-[16px]"),
 		Div(
-			sidebarExplorerItemDocument(sidebarExplorerItemDocumentProps{
-				text: "Document",
-			}),
-			sidebarExplorerItemDocument(sidebarExplorerItemDocumentProps{
-				text: "Document",
-			}),
-
-			sidebarExplorerCategory(sidebarExplorerCategoryProps{
-				text:       "Category",
-				isExpanded: false,
-			}),
-			sidebarExplorerCategory(sidebarExplorerCategoryProps{
-				text:       "Category",
-				isExpanded: true,
-			}),
-
-			sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
-				text:       "Component",
-				isExpanded: false,
-			}),
-			sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
-				text:       "Component",
-				isExpanded: true,
-			}),
-
-			sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
-				text:     "Story",
-				isActive: true,
-			}),
-			sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
-				text:     "Story",
-				isActive: false,
-			}),
-
-			sidebarExplorerItemFolder(sidebarExplorerItemFolderProps{
-				text:       "Folder",
-				isExpanded: false,
-			}),
-			sidebarExplorerItemFolder(sidebarExplorerItemFolderProps{
-				text:       "Folder",
-				isExpanded: true,
-			}),
+			g.Group(g.Map(menuItems, func(item MenuItem) g.Node {
+				return transformMenuItem(item)
+			})),
 		),
 	)
+}
+
+func collectMenuItemsFromRoot(root MenuRoot) []MenuItem {
+	var menuItems []MenuItem
+	for _, menuItem := range root.MenuItems {
+		collectMenuItems(menuItem, &menuItems)
+	}
+	return menuItems
+}
+
+func collectMenuItems(item MenuItem, resultMenuItems *[]MenuItem) {
+	*resultMenuItems = append(*resultMenuItems, item)
+	for _, menuItem := range item.MenuItems {
+		collectMenuItems(menuItem, resultMenuItems)
+	}
+}
+
+func transformMenuItem(item MenuItem) g.Node {
+	if item.Type == TypeCategory {
+		return sidebarExplorerCategory(sidebarExplorerCategoryProps{
+			text:       item.Text,
+			isExpanded: false,
+		})
+	}
+	if item.Type == TypeComponent {
+		return sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
+			text:       item.Text,
+			isExpanded: false,
+		})
+	}
+	if item.Type == TypeDocument {
+		return sidebarExplorerItemDocument(sidebarExplorerItemDocumentProps{
+			text: item.Text,
+		})
+	}
+	if item.Type == TypeFolder {
+		return sidebarExplorerItemFolder(sidebarExplorerItemFolderProps{
+			text:       item.Text,
+			isExpanded: false,
+		})
+	}
+	if item.Type == TypeStory {
+		return sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
+			text:     item.Text,
+			isActive: false,
+		})
+	}
+	return nil
 }
 
 type sidebarExplorerCategoryProps struct {
