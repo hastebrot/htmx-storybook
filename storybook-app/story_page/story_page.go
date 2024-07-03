@@ -160,61 +160,48 @@ func sidebarSearchField() g.Node {
 }
 
 func sidebarExplorer(menu MenuRoot) g.Node {
-	menuItems := collectMenuItemsFromRoot(menu)
-
 	return Nav(Class("mt-[16px]"),
 		Div(
-			g.Group(g.Map(menuItems, func(item MenuItem) g.Node {
+			g.Group(g.Map(menu.MenuItems, func(item MenuItem) g.Node {
 				return transformMenuItem(item)
 			})),
 		),
 	)
 }
 
-func collectMenuItemsFromRoot(root MenuRoot) []MenuItem {
-	var menuItems []MenuItem
-	for _, menuItem := range root.MenuItems {
-		collectMenuItems(menuItem, &menuItems)
-	}
-	return menuItems
-}
-
-func collectMenuItems(item MenuItem, resultMenuItems *[]MenuItem) {
-	*resultMenuItems = append(*resultMenuItems, item)
-	for _, menuItem := range item.MenuItems {
-		collectMenuItems(menuItem, resultMenuItems)
-	}
-}
-
 func transformMenuItem(item MenuItem) g.Node {
+	children := g.Group(g.Map(item.MenuItems, func(item MenuItem) g.Node {
+		return transformMenuItem(item)
+	}))
+
 	if item.Type == TypeCategory {
 		return sidebarExplorerCategory(sidebarExplorerCategoryProps{
 			text:       item.Text,
-			isExpanded: false,
-		})
+			isExpanded: true,
+		}, children)
 	}
 	if item.Type == TypeComponent {
 		return sidebarExplorerItemComponent(sidebarExplorerItemComponentProps{
 			text:       item.Text,
-			isExpanded: false,
-		})
+			isExpanded: true,
+		}, children)
 	}
 	if item.Type == TypeDocument {
 		return sidebarExplorerItemDocument(sidebarExplorerItemDocumentProps{
 			text: item.Text,
-		})
+		}, children)
 	}
 	if item.Type == TypeFolder {
 		return sidebarExplorerItemFolder(sidebarExplorerItemFolderProps{
 			text:       item.Text,
-			isExpanded: false,
-		})
+			isExpanded: true,
+		}, children)
 	}
 	if item.Type == TypeStory {
 		return sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
 			text:     item.Text,
 			isActive: false,
-		})
+		}, children)
 	}
 	return nil
 }
@@ -224,15 +211,18 @@ type sidebarExplorerCategoryProps struct {
 	isExpanded bool
 }
 
-func sidebarExplorerCategory(props sidebarExplorerCategoryProps) g.Node {
-	return Div(Class("flex items-center mt-[16px] mb-[4px] min-h-[20px]"),
-		Span(Classes(
-			g.If(props.isExpanded, Class("rotate-90")),
-			Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+func sidebarExplorerCategory(props sidebarExplorerCategoryProps, children ...g.Node) g.Node {
+	return Div(
+		Div(Class("flex items-center mt-[16px] mb-[4px] min-h-[20px]"),
+			Span(Classes(
+				g.If(props.isExpanded, Class("rotate-90")),
+				Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+			),
+			Button(Class("ml-[6px] text-[rgb(153,153,153)] uppercase tracking-[0.35em] text-[11px] leading-[16px] font-[900]"),
+				g.Text(props.text),
+			),
 		),
-		Button(Class("ml-[6px] text-[rgb(153,153,153)] uppercase tracking-[0.35em] text-[11px] leading-[16px] font-[900]"),
-			g.Text(props.text),
-		),
+		Div(Class("ml-[0px]"), g.Group(children)),
 	)
 }
 
@@ -240,14 +230,17 @@ type sidebarExplorerItemDocumentProps struct {
 	text string
 }
 
-func sidebarExplorerItemDocument(props sidebarExplorerItemDocumentProps) g.Node {
-	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-		Span(Class("invisible mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
-		Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(255,131,0)]"),
-			lucide.FileText(Class("block w-[14px] flex-shrink-0")),
-		),
-		Span(g.Text(props.text)),
-	))
+func sidebarExplorerItemDocument(props sidebarExplorerItemDocumentProps, children ...g.Node) g.Node {
+	return Div(
+		Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+			Span(Class("invisible mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+			Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(255,131,0)]"),
+				lucide.FileText(Class("block w-[14px] flex-shrink-0")),
+			),
+			Span(g.Text(props.text)),
+		)),
+		Div(Class("ml-[22px]"), g.Group(children)),
+	)
 }
 
 type sidebarExplorerItemComponentProps struct {
@@ -255,17 +248,20 @@ type sidebarExplorerItemComponentProps struct {
 	isExpanded bool
 }
 
-func sidebarExplorerItemComponent(props sidebarExplorerItemComponentProps) g.Node {
-	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-		Span(Classes(
-			g.If(props.isExpanded, Class("rotate-90")),
-			Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
-		),
-		Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(30,167,253)]"),
-			lucide.Grid2x2(Class("block w-[14px] flex-shrink-0")),
-		),
-		Span(g.Text(props.text)),
-	))
+func sidebarExplorerItemComponent(props sidebarExplorerItemComponentProps, children ...g.Node) g.Node {
+	return Div(
+		Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+			Span(Classes(
+				g.If(props.isExpanded, Class("rotate-90")),
+				Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+			),
+			Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(30,167,253)]"),
+				lucide.Grid2x2(Class("block w-[14px] flex-shrink-0")),
+			),
+			Span(g.Text(props.text)),
+		)),
+		Div(Class("ml-[22px]"), g.Group(children)),
+	)
 }
 
 type sidebarExplorerItemStoryProps struct {
@@ -273,20 +269,23 @@ type sidebarExplorerItemStoryProps struct {
 	isActive bool
 }
 
-func sidebarExplorerItemStory(props sidebarExplorerItemStoryProps) g.Node {
-	return Div(A(Classes(
-		Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-		g.If(props.isActive, Class("bg-[rgb(30,167,253)] hover:!bg-[rgb(30,167,253)] text-[rgb(255,255,255)] font-[600]")),
-	),
-		Span(Class("ml-[22px]")),
-		Span(Classes(
-			Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(55,213,211)]"),
-			g.If(props.isActive, Class("text-[rgb(255,255,255)]")),
+func sidebarExplorerItemStory(props sidebarExplorerItemStoryProps, children ...g.Node) g.Node {
+	return Div(
+		Div(A(Classes(
+			Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+			g.If(props.isActive, Class("bg-[rgb(30,167,253)] hover:!bg-[rgb(30,167,253)] text-[rgb(255,255,255)] font-[600]")),
 		),
-			lucide.Bookmark(Class("block w-[14px] flex-shrink-0")),
-		),
-		Span(g.Text(props.text)),
-	))
+			Span(Class("invisible mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+			Span(Classes(
+				Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(55,213,211)]"),
+				g.If(props.isActive, Class("text-[rgb(255,255,255)]")),
+			),
+				lucide.Bookmark(Class("block w-[14px] flex-shrink-0")),
+			),
+			Span(g.Text(props.text)),
+		)),
+		Div(Class("ml-[22px]"), g.Group(children)),
+	)
 }
 
 type sidebarExplorerItemFolderProps struct {
@@ -294,17 +293,20 @@ type sidebarExplorerItemFolderProps struct {
 	isExpanded bool
 }
 
-func sidebarExplorerItemFolder(props sidebarExplorerItemFolderProps) g.Node {
-	return Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
-		Span(Classes(
-			g.If(props.isExpanded, Class("rotate-90")),
-			Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
-		),
-		Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(119,77,215)]"),
-			lucide.Folder(Class("block w-[14px] flex-shrink-0")),
-		),
-		Span(g.Text(props.text)),
-	))
+func sidebarExplorerItemFolder(props sidebarExplorerItemFolderProps, children ...g.Node) g.Node {
+	return Div(
+		Div(A(Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
+			Span(Classes(
+				g.If(props.isExpanded, Class("rotate-90")),
+				Class("mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
+			),
+			Span(Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(119,77,215)]"),
+				lucide.Folder(Class("block w-[14px] flex-shrink-0")),
+			),
+			Span(g.Text(props.text)),
+		)),
+		Div(Class("ml-[22px]"), g.Group(children)),
+	)
 }
 
 func toolbar() g.Node {
