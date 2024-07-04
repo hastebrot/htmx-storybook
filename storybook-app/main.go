@@ -18,6 +18,7 @@ import (
 
 	. "storybook-app/helper"
 	"storybook-app/shadcn_accordion"
+	"storybook-app/shadcn_tabs"
 	"storybook-app/story_page"
 )
 
@@ -136,6 +137,10 @@ func handlerSite(writer http.ResponseWriter, req *http.Request) {
 	case "shadcn_accordion":
 		node = story_page.StoryPage(story_page.StoryPageProps{
 			CanvasSlot: shadcn_accordion.AccordionStory(),
+		})
+	case "shadcn_tabs":
+		node = story_page.StoryPage(story_page.StoryPageProps{
+			CanvasSlot: shadcn_tabs.TabsStory(),
 		})
 	default:
 		node = story_page.StoryPage(story_page.StoryPageProps{
