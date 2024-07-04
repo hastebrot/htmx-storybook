@@ -6,6 +6,7 @@ type MenuRoot struct {
 
 type MenuItem struct {
 	Text      string
+	Link      string
 	Type      MenuItemType
 	MenuItems []MenuItem
 }

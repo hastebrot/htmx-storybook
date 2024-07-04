@@ -10,46 +10,25 @@ import (
 	. "storybook-app/model"
 )
 
-func StoryPage() g.Node {
+type StoryPageProps struct {
+	CanvasSlot g.Node
+}
+
+func StoryPage(props StoryPageProps) g.Node {
 	menu := MenuRoot{
 		MenuItems: []MenuItem{
 			{
-				Text: "Document",
-				Type: TypeDocument,
+				Text: "index",
+				Link: "/pages/",
+				Type: TypeStory,
 			},
 			{
-				Text: "Category",
-				Type: TypeCategory,
+				Text: "shadcn-ui",
 				MenuItems: []MenuItem{
 					{
-						Text: "Component",
-						Type: TypeComponent,
-						MenuItems: []MenuItem{
-							{
-								Text: "Story",
-								Type: TypeStory,
-							},
-						},
-					},
-					{
-						Text: "Folder",
-						Type: TypeFolder,
-						MenuItems: []MenuItem{
-							{
-								Text: "Document",
-								Type: TypeDocument,
-							},
-							{
-								Text: "Component",
-								Type: TypeComponent,
-								MenuItems: []MenuItem{
-									{
-										Text: "Story",
-										Type: TypeStory,
-									},
-								},
-							},
-						},
+						Text: "shadcn_accordion",
+						Link: "/pages/shadcn_accordion",
+						Type: TypeStory,
 					},
 				},
 			},
@@ -64,7 +43,7 @@ func StoryPage() g.Node {
 			Div(
 				Class("h-full bg-[#FFFFFF] [box-shadow:rgba(0,0,0,0.1)_0_1px_5px_0] rounded-[4px] overflow-hidden flex flex-col"),
 				toolbar(),
-				Div(Class("flex-1")),
+				Div(Class("flex-1"), props.CanvasSlot),
 			),
 		),
 	)
@@ -200,6 +179,7 @@ func transformMenuItem(item MenuItem) g.Node {
 	if item.Type == TypeStory {
 		return sidebarExplorerItemStory(sidebarExplorerItemStoryProps{
 			text:     item.Text,
+			link:     item.Link,
 			isActive: false,
 		}, children)
 	}
@@ -266,6 +246,7 @@ func sidebarExplorerItemComponent(props sidebarExplorerItemComponentProps, child
 
 type sidebarExplorerItemStoryProps struct {
 	text     string
+	link     string
 	isActive bool
 }
 
@@ -275,6 +256,10 @@ func sidebarExplorerItemStory(props sidebarExplorerItemStoryProps, children ...g
 			Class("flex items-center text-[13px] text-[rgb(51,51,51)] py-[2px] cursor-pointer hover:bg-[rgba(30,167,253,0.07)] hover:outline-none"),
 			g.If(props.isActive, Class("bg-[rgb(30,167,253)] hover:!bg-[rgb(30,167,253)] text-[rgb(255,255,255)] font-[600]")),
 		),
+			Href(props.link),
+			// hx.Get(props.link),
+			// hx.PushURL("true"),
+			// hx.Target("body"),
 			Span(Class("invisible mt-[4px] ml-[-2px] mr-[2px] inline-block border-l-[3px] border-l-[rgba(153,153,153,0.6)] border-y-[3px] border-y-transparent")),
 			Span(Classes(
 				Class("p-[1px] ml-[5px] mr-[6px] text-[rgb(55,213,211)]"),
