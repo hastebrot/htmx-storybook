@@ -17,7 +17,8 @@ import (
 	. "github.com/maragudk/gomponents/html"
 
 	. "storybook-app/helper"
-	. "storybook-app/story_page"
+	"storybook-app/shadcn_accordion"
+	"storybook-app/story_page"
 )
 
 var serviceName string
@@ -132,8 +133,14 @@ func handlerSite(writer http.ResponseWriter, req *http.Request) {
 	pageParam := req.URL.Query().Get("page")
 	var node g.Node
 	switch pageParam {
+	case "shadcn_accordion":
+		node = story_page.StoryPage(story_page.StoryPageProps{
+			CanvasSlot: shadcn_accordion.AccordionStory(),
+		})
 	default:
-		node = StoryPage()
+		node = story_page.StoryPage(story_page.StoryPageProps{
+			CanvasSlot: Div(),
+		})
 	}
 
 	writer.Header().Set("content-type", "text/html; charset=utf-8")
