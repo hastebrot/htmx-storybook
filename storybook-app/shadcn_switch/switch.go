@@ -36,15 +36,15 @@ func Switch(props SwitchProps) g.Node {
 	)
 }
 
-func SwitchStory() g.Node {
+func StorySwitch() g.Node {
 	return Div(
-		Story(
+		story(
 			Switch(SwitchProps{
 				Text:      "Label",
 				IsChecked: false,
 			}),
 		),
-		Story(
+		story(
 			Switch(SwitchProps{
 				Text:      "Label",
 				IsChecked: true,
@@ -53,7 +53,7 @@ func SwitchStory() g.Node {
 	)
 }
 
-func Story(children ...g.Node) g.Node {
+func story(children ...g.Node) g.Node {
 	return Div(
 		Class("flex min-h-[150px] w-full items-start justify-center p-10"),
 		g.Group(children),

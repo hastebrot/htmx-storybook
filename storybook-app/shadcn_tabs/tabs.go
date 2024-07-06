@@ -63,8 +63,8 @@ func TabsContent(children ...g.Node) g.Node {
 	)
 }
 
-func TabsStory() g.Node {
-	return Story(
+func StoryTabs() g.Node {
+	return story(
 		Tabs(
 			TabsList(
 				TabsItem(TabsItemProps{
@@ -83,7 +83,7 @@ func TabsStory() g.Node {
 	)
 }
 
-func Story(children ...g.Node) g.Node {
+func story(children ...g.Node) g.Node {
 	return Div(
 		Class("flex min-h-[350px] w-full items-start justify-center p-10"),
 		g.Group(children),

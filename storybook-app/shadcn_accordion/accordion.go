@@ -40,8 +40,8 @@ func AccordionContent(children ...g.Node) g.Node {
 	)
 }
 
-func AccordionStory() g.Node {
-	return Story(
+func StoryAccordion() g.Node {
+	return story(
 		Accordion(
 			AccordionItem(AccordionItemProps{
 				Name: "shadcn_accordion",
@@ -65,7 +65,7 @@ func AccordionStory() g.Node {
 	)
 }
 
-func Story(children ...g.Node) g.Node {
+func story(children ...g.Node) g.Node {
 	return Div(
 		Class("flex min-h-[350px] w-full items-start justify-center p-10"),
 		g.Group(children),
