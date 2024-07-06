@@ -6,6 +6,7 @@ import (
 	"storybook-app/model"
 	"storybook-app/shadcn_accordion"
 	"storybook-app/shadcn_select"
+	"storybook-app/shadcn_switch"
 	"storybook-app/shadcn_tabs"
 	"storybook-app/story_page"
 )
@@ -22,6 +23,11 @@ func BuildRootNode(page string) g.Node {
 	case "shadcn_select":
 		node = story_page.StoryPage(story_page.StoryPageProps{
 			CanvasSlot: shadcn_select.SelectStory(),
+			MenuRoot:   menu,
+		})
+	case "shadcn_switch":
+		node = story_page.StoryPage(story_page.StoryPageProps{
+			CanvasSlot: shadcn_switch.SwitchStory(),
 			MenuRoot:   menu,
 		})
 	case "shadcn_tabs":
@@ -57,6 +63,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_select",
 						Link: "/pages/shadcn_select",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_switch",
+						Link: "/pages/shadcn_switch",
 						Type: model.TypeStory,
 					},
 					{

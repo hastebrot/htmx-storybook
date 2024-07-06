@@ -17,6 +17,7 @@ func Classes(nodes ...g.Node) g.Node {
 			c := builder.String()
 			c = strings.TrimPrefix(c, " class=\"")
 			c = strings.TrimSuffix(c, "\"")
+			c = strings.ReplaceAll(c, "&amp;", "&")
 			classes = append(classes, c)
 		}
 	}

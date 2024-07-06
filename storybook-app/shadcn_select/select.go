@@ -76,7 +76,6 @@ func SelectItem(props SelectItemProps) g.Node {
 		),
 		Span(g.Text(props.Text)),
 	)
-
 }
 
 func Story(children ...g.Node) g.Node {
