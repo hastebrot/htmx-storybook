@@ -12,42 +12,13 @@ import (
 
 type StoryPageProps struct {
 	CanvasSlot g.Node
+	MenuRoot   MenuRoot
 }
 
 func StoryPage(props StoryPageProps) g.Node {
-	menu := MenuRoot{
-		MenuItems: []MenuItem{
-			{
-				Text: "index",
-				Link: "/pages/",
-				Type: TypeStory,
-			},
-			{
-				Text: "shadcn-ui",
-				MenuItems: []MenuItem{
-					{
-						Text: "shadcn_accordion",
-						Link: "/pages/shadcn_accordion",
-						Type: TypeStory,
-					},
-					{
-						Text: "shadcn_select",
-						Link: "/pages/shadcn_select",
-						Type: TypeStory,
-					},
-					{
-						Text: "shadcn_tabs",
-						Link: "/pages/shadcn_tabs",
-						Type: TypeStory,
-					},
-				},
-			},
-		},
-	}
-
 	return Div(Classes(Class("grid grid-cols-[auto_1fr] bg-[#F7F9FC]")),
 		Div(Class("flex flex-col w-[250px] overflow-y-scroll"),
-			sidebar(menu),
+			sidebar(props.MenuRoot),
 		),
 		Div(Class("p-[10px] pl-0 flex flex-col"),
 			Div(

@@ -17,10 +17,7 @@ import (
 	. "github.com/maragudk/gomponents/html"
 
 	. "storybook-app/helper"
-	"storybook-app/shadcn_accordion"
-	"storybook-app/shadcn_select"
-	"storybook-app/shadcn_tabs"
-	"storybook-app/story_page"
+	"storybook-app/router"
 )
 
 var serviceName string
@@ -133,32 +130,13 @@ func handlerIndex(writer http.ResponseWriter, req *http.Request) {
 
 func handlerSite(writer http.ResponseWriter, req *http.Request) {
 	pageParam := req.URL.Query().Get("page")
-	var node g.Node
-	switch pageParam {
-	case "shadcn_accordion":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_accordion.AccordionStory(),
-		})
-	case "shadcn_select":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_select.SelectStory(),
-		})
-	case "shadcn_tabs":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_tabs.TabsStory(),
-		})
-	default:
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: Div(),
-		})
-	}
-
+	rootNode := router.BuildRootNode(pageParam)
 	writer.Header().Set("content-type", "text/html; charset=utf-8")
 	writer.Header().Set("hx-push-url", fmt.Sprintf("/pages/%s", pageParam))
 	_ = Div(
 		Class("grid h-full w-full"),
-		g.If(node != nil, Lazy(func() g.Node {
-			return node
+		g.If(rootNode != nil, Lazy(func() g.Node {
+			return rootNode
 		})),
 	).Render(writer)
 }
