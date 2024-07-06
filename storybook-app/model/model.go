@@ -1,5 +1,9 @@
 package model
 
+import (
+	g "github.com/maragudk/gomponents"
+)
+
 type MenuRoot struct {
 	MenuItems []MenuItem
 }
@@ -9,6 +13,7 @@ type MenuItem struct {
 	Link      string
 	Type      MenuItemType
 	MenuItems []MenuItem
+	Component func() g.Node
 }
 
 type MenuItemType int
