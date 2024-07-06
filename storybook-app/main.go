@@ -122,6 +122,7 @@ func handlerIndex(writer http.ResponseWriter, req *http.Request) {
 					hx.Ext("morph"),
 					hx.Get(fmt.Sprintf("/site?page=%s", pageParam)),
 					hx.Trigger("load"),
+					Span(g.Text("Loading site...")),
 				),
 			),
 		),
