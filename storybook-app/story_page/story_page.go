@@ -31,6 +31,11 @@ func StoryPage(props StoryPageProps) g.Node {
 						Type: TypeStory,
 					},
 					{
+						Text: "shadcn_select",
+						Link: "/pages/shadcn_select",
+						Type: TypeStory,
+					},
+					{
 						Text: "shadcn_tabs",
 						Link: "/pages/shadcn_tabs",
 						Type: TypeStory,
