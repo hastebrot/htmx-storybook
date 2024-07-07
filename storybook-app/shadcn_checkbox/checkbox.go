@@ -9,6 +9,7 @@ import (
 )
 
 type CheckboxProps struct {
+	Label     string
 	IsChecked bool
 }
 
@@ -23,13 +24,13 @@ func Checkbox(props CheckboxProps) g.Node {
 				g.If(props.IsChecked, Class("bg-[#18181B] text-[#FAFAFA]")),
 			),
 			g.If(props.IsChecked,
-				Span(Class("flex items-center justify-center text-current"),
-					lucide.Check(Class("block h-3.5 w-3.5 flex-shrink-0 [stroke-width:2px]")),
+				Span(Class("flex items-center justify-center"),
+					lucide.Check(Class("block h-3.5 w-3.5 flex-shrink-0 [stroke-width:2px] text-current")),
 				),
 			),
 		),
 		CheckboxLabel(CheckboxLabelProps{
-			Text: "Label",
+			Text: props.Label,
 		}),
 	)
 }
@@ -47,8 +48,11 @@ func CheckboxLabel(props CheckboxLabelProps) g.Node {
 func StoryCheckbox() g.Node {
 	return Div(
 		story(
-			Checkbox(CheckboxProps{}),
 			Checkbox(CheckboxProps{
+				Label: "Label",
+			}),
+			Checkbox(CheckboxProps{
+				Label:     "Label",
 				IsChecked: true,
 			}),
 		),
