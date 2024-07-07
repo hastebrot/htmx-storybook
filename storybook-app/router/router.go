@@ -6,6 +6,7 @@ import (
 	"storybook-app/model"
 	"storybook-app/shadcn_accordion"
 	"storybook-app/shadcn_button"
+	"storybook-app/shadcn_checkbox"
 	"storybook-app/shadcn_select"
 	"storybook-app/shadcn_switch"
 	"storybook-app/shadcn_tabs"
@@ -17,37 +18,24 @@ func BuildRootNode(page string) g.Node {
 	var node g.Node
 	switch page {
 	case "shadcn_accordion":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_accordion.StoryAccordion(),
-			MenuRoot:   menu,
-		})
+		node = shadcn_accordion.StoryAccordion()
 	case "shadcn_button":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_button.StoryButton(),
-			MenuRoot:   menu,
-		})
+		node = shadcn_button.StoryButton()
+	case "shadcn_checkbox":
+		node = shadcn_checkbox.StoryCheckbox()
 	case "shadcn_select":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_select.StorySelect(),
-			MenuRoot:   menu,
-		})
+		node = shadcn_select.StorySelect()
 	case "shadcn_switch":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_switch.StorySwitch(),
-			MenuRoot:   menu,
-		})
+		node = shadcn_switch.StorySwitch()
 	case "shadcn_tabs":
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: shadcn_tabs.StoryTabs(),
-			MenuRoot:   menu,
-		})
+		node = shadcn_tabs.StoryTabs()
 	default:
-		node = story_page.StoryPage(story_page.StoryPageProps{
-			CanvasSlot: nil,
-			MenuRoot:   menu,
-		})
+		node = nil
 	}
-	return node
+	return story_page.StoryPage(story_page.StoryPageProps{
+		CanvasSlot: node,
+		MenuRoot:   menu,
+	})
 }
 
 func buildMenu() model.MenuRoot {
@@ -69,6 +57,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_button",
 						Link: "/pages/shadcn_button",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_checkbox",
+						Link: "/pages/shadcn_checkbox",
 						Type: model.TypeStory,
 					},
 					{
