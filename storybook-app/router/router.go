@@ -16,6 +16,7 @@ import (
 	"storybook-app/shadcn_radiogroup"
 	"storybook-app/shadcn_select"
 	"storybook-app/shadcn_switch"
+	"storybook-app/shadcn_table"
 	"storybook-app/shadcn_tabs"
 	"storybook-app/story_page"
 )
@@ -48,6 +49,8 @@ func BuildRootNode(page string) g.Node {
 		node = shadcn_select.StorySelect()
 	case "shadcn_switch":
 		node = shadcn_switch.StorySwitch()
+	case "shadcn_table":
+		node = shadcn_table.StoryTable()
 	case "shadcn_tabs":
 		node = shadcn_tabs.StoryTabs()
 	default:
@@ -128,6 +131,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_switch",
 						Link: "/pages/shadcn_switch",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_table",
+						Link: "/pages/shadcn_table",
 						Type: model.TypeStory,
 					},
 					{
