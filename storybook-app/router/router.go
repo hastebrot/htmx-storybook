@@ -5,6 +5,7 @@ import (
 
 	"storybook-app/model"
 	"storybook-app/shadcn_accordion"
+	"storybook-app/shadcn_badge"
 	"storybook-app/shadcn_button"
 	"storybook-app/shadcn_checkbox"
 	"storybook-app/shadcn_input"
@@ -22,6 +23,8 @@ func BuildRootNode(page string) g.Node {
 	switch page {
 	case "shadcn_accordion":
 		node = shadcn_accordion.StoryAccordion()
+	case "shadcn_badge":
+		node = shadcn_badge.StoryBadge()
 	case "shadcn_button":
 		node = shadcn_button.StoryButton()
 	case "shadcn_checkbox":
@@ -61,6 +64,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_accordion",
 						Link: "/pages/shadcn_accordion",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_badge",
+						Link: "/pages/shadcn_badge",
 						Type: model.TypeStory,
 					},
 					{
