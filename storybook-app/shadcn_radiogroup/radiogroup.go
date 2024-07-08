@@ -6,6 +6,7 @@ import (
 	. "github.com/maragudk/gomponents/html"
 
 	. "storybook-app/helper"
+	"storybook-app/shadcn_label"
 )
 
 func RadioGroup(children ...g.Node) g.Node {
@@ -36,19 +37,9 @@ func RadioButton(props RadioButtonProps) g.Node {
 				),
 			),
 		),
-		RadioButtonLabel(RadioButtonLabelProps{
+		shadcn_label.Label(shadcn_label.LabelProps{
 			Text: props.Label,
 		}),
-	)
-}
-
-type RadioButtonLabelProps struct {
-	Text string
-}
-
-func RadioButtonLabel(props RadioButtonLabelProps) g.Node {
-	return Label(Class("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),
-		g.Text(props.Text),
 	)
 }
 

@@ -6,6 +6,7 @@ import (
 	. "github.com/maragudk/gomponents/html"
 
 	. "storybook-app/helper"
+	"storybook-app/shadcn_label"
 )
 
 type CheckboxProps struct {
@@ -29,19 +30,9 @@ func Checkbox(props CheckboxProps) g.Node {
 				),
 			),
 		),
-		CheckboxLabel(CheckboxLabelProps{
+		shadcn_label.Label(shadcn_label.LabelProps{
 			Text: props.Label,
 		}),
-	)
-}
-
-type CheckboxLabelProps struct {
-	Text string
-}
-
-func CheckboxLabel(props CheckboxLabelProps) g.Node {
-	return Label(Class("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),
-		g.Text(props.Text),
 	)
 }
 
