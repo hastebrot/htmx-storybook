@@ -5,6 +5,7 @@ import (
 
 	"storybook-app/model"
 	"storybook-app/shadcn_accordion"
+	"storybook-app/shadcn_alert"
 	"storybook-app/shadcn_badge"
 	"storybook-app/shadcn_breadcrumb"
 	"storybook-app/shadcn_button"
@@ -27,6 +28,8 @@ func BuildRootNode(page string) g.Node {
 	switch page {
 	case "shadcn_accordion":
 		node = shadcn_accordion.StoryAccordion()
+	case "shadcn_alert":
+		node = shadcn_alert.StoryAlert()
 	case "shadcn_badge":
 		node = shadcn_badge.StoryBadge()
 	case "shadcn_breadcrumb":
@@ -76,6 +79,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_accordion",
 						Link: "/pages/shadcn_accordion",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_alert",
+						Link: "/pages/shadcn_alert",
 						Type: model.TypeStory,
 					},
 					{
