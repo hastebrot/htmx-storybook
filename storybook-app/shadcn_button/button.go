@@ -27,6 +27,7 @@ func Button(props ButtonProps) g.Node {
 	return h.Button(Classes(
 		h.Class("inline-flex items-center justify-center whitespace-nowrap rounded-md"),
 		h.Class("text-sm font-medium transition-colors"),
+		h.Class("h-10 px-4 py-2"),
 		h.Class("focus-visible:outline-none"),
 		h.Class("disabled:pointer-events-none disabled:opacity-50"),
 		g.If(props.Variant == ButtonVariantPrimary,
@@ -47,7 +48,6 @@ func Button(props ButtonProps) g.Node {
 		g.If(props.Variant == ButtonVariantLink,
 			h.Class("text-[#09090B] hover:text-[#18181B] hover:underline"),
 		),
-		h.Class("h-10 px-4 py-2"),
 	),
 		g.Text(props.Text),
 	)
