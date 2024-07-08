@@ -8,6 +8,7 @@ import (
 	"storybook-app/shadcn_button"
 	"storybook-app/shadcn_checkbox"
 	"storybook-app/shadcn_input"
+	"storybook-app/shadcn_label"
 	"storybook-app/shadcn_radiogroup"
 	"storybook-app/shadcn_select"
 	"storybook-app/shadcn_switch"
@@ -27,6 +28,8 @@ func BuildRootNode(page string) g.Node {
 		node = shadcn_checkbox.StoryCheckbox()
 	case "shadcn_input":
 		node = shadcn_input.StoryInput()
+	case "shadcn_label":
+		node = shadcn_label.StoryLabel()
 	case "shadcn_radiogroup":
 		node = shadcn_radiogroup.StoryRadioGroup()
 	case "shadcn_select":
@@ -73,6 +76,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_input",
 						Link: "/pages/shadcn_input",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_label",
+						Link: "/pages/shadcn_label",
 						Type: model.TypeStory,
 					},
 					{

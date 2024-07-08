@@ -1,11 +1,21 @@
 package helper
 
 import (
+	"html/template"
 	"io"
 	"strings"
 
 	g "github.com/maragudk/gomponents"
 	. "github.com/maragudk/gomponents/html"
+)
+
+var (
+	htmlNull = template.HTMLEscapeString("\000")
+	htmlQuot = template.HTMLEscapeString("\"")
+	htmlApos = template.HTMLEscapeString("'")
+	htmlAmp  = template.HTMLEscapeString("&")
+	htmlLt   = template.HTMLEscapeString("<")
+	htmlGt   = template.HTMLEscapeString(">")
 )
 
 func Classes(nodes ...g.Node) g.Node {
@@ -17,7 +27,12 @@ func Classes(nodes ...g.Node) g.Node {
 			c := builder.String()
 			c = strings.TrimPrefix(c, " class=\"")
 			c = strings.TrimSuffix(c, "\"")
-			c = strings.ReplaceAll(c, "&amp;", "&")
+			c = strings.ReplaceAll(c, htmlNull, "\000")
+			c = strings.ReplaceAll(c, htmlQuot, "\"")
+			c = strings.ReplaceAll(c, htmlApos, "'")
+			c = strings.ReplaceAll(c, htmlAmp, "&")
+			c = strings.ReplaceAll(c, htmlLt, "<")
+			c = strings.ReplaceAll(c, htmlGt, ">")
 			classes = append(classes, c)
 		}
 	}
