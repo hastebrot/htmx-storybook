@@ -16,11 +16,14 @@ type StoryPageProps struct {
 }
 
 func StoryPage(props StoryPageProps) g.Node {
-	return Div(Classes(Class("grid grid-cols-[auto_1fr] bg-[#F7F9FC]")),
+	return Div(Classes(
+		// Class("[&:has(input[name=toolbar-fullscreen]:checked)>div:nth-child(1)]:hidden"),
+		Class("grid grid-cols-[auto_1fr] bg-[#F7F9FC]"),
+	),
 		Div(Class("flex flex-col w-[250px] overflow-y-scroll"),
 			sidebar(props.MenuRoot),
 		),
-		Div(Class("p-[10px] pl-0 flex flex-col"),
+		Div(Class("col-start-2 p-[10px] pl-0 flex flex-col"),
 			Div(
 				Class("h-full bg-[#FFFFFF] [box-shadow:rgba(0,0,0,0.1)_0_1px_5px_0] rounded-[4px] overflow-hidden flex flex-col"),
 				toolbar(),
@@ -288,8 +291,16 @@ func toolbar() g.Node {
 				toolbarIconButton(lucide.Search(Class("w-[16px]"))),
 			),
 			Div(Class("flex whitespace-nowrap shrink-0 ml-[30px] mr-[3px]"),
-				toolbarIconButton(lucide.Fullscreen(Class("w-[16px]"))),
-				toolbarIconButton(lucide.ExternalLink(Class("w-[16px]"))),
+				toolbarIconToggleButton(toolbarIconToggleButtonProps{
+					Name: "toolbar-fullscreen",
+				},
+					lucide.Fullscreen(Class("w-[16px]")),
+				),
+				toolbarIconToggleButton(toolbarIconToggleButtonProps{
+					Name: "toolbar-external-link",
+				},
+					lucide.ExternalLink(Class("w-[16px]")),
+				),
 			),
 		),
 	)
@@ -313,5 +324,21 @@ func toolbarDivider() g.Node {
 }
 
 func toolbarIconButton(children ...g.Node) g.Node {
-	return Button(Class("inline-flex items-center justify-center bg-transparent ml-[4px] mt-[6px] p-[8px_7px] cursor-pointer rounded-[4px] h-[28px] hover:bg-[rgba(30,167,253,0.1)] hover:text-[rgb(30,167,253)]"), g.Group(children))
+	return Button(Class("inline-flex items-center justify-center bg-transparent ml-[4px] mt-[6px] p-[8px_7px] cursor-pointer rounded-[4px] h-[28px] hover:bg-[rgba(30,167,253,0.1)] hover:text-[rgb(30,167,253)]"),
+		g.Group(children),
+	)
+}
+
+type toolbarIconToggleButtonProps struct {
+	Name string
+}
+
+func toolbarIconToggleButton(props toolbarIconToggleButtonProps, children ...g.Node) g.Node {
+	return Label(Class("inline-flex items-center justify-center bg-transparent ml-[4px] mt-[6px] p-[8px_7px] cursor-pointer rounded-[4px] h-[28px] hover:bg-[rgba(30,167,253,0.1)] hover:text-[rgb(30,167,253)]"),
+		Input(Class("hidden"),
+			Type("checkbox"),
+			Name(props.Name),
+		),
+		g.Group(children),
+	)
 }
