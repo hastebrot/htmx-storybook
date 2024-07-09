@@ -17,8 +17,9 @@ func RadioGroup(children ...g.Node) g.Node {
 }
 
 type RadioButtonProps struct {
-	Label     string
-	IsChecked bool
+	Label      string
+	IsChecked  bool
+	IsDisabled bool
 }
 
 func RadioButton(props RadioButtonProps) g.Node {
@@ -31,6 +32,7 @@ func RadioButton(props RadioButtonProps) g.Node {
 				Class("disabled:cursor-not-allowed disabled:opacity-50"),
 				g.If(props.IsChecked, Class("bg-[#FAFAFA] text-[#18181B]")),
 			),
+			g.If(props.IsDisabled, Disabled()),
 			g.If(props.IsChecked,
 				Span(Class("flex items-center justify-center"),
 					lucide.Circle(Class("block h-2.5 w-2.5 flex-shrink-0 [stroke-width:2px] fill-current")),
@@ -55,7 +57,8 @@ func StoryRadioGroup() g.Node {
 					IsChecked: true,
 				}),
 				RadioButton(RadioButtonProps{
-					Label: "Compact",
+					Label:      "Compact",
+					IsDisabled: true,
 				}),
 			),
 		),
