@@ -20,6 +20,7 @@ import (
 	"storybook-app/shadcn_switch"
 	"storybook-app/shadcn_table"
 	"storybook-app/shadcn_tabs"
+	"storybook-app/shadcn_textarea"
 	"storybook-app/story_page"
 )
 
@@ -59,6 +60,8 @@ func BuildRootNode(page string) g.Node {
 		node = shadcn_table.StoryTable()
 	case "shadcn_tabs":
 		node = shadcn_tabs.StoryTabs()
+	case "shadcn_textarea":
+		node = shadcn_textarea.StoryTextarea()
 	default:
 		node = nil
 	}
@@ -157,6 +160,11 @@ func buildMenu() model.MenuRoot {
 					{
 						Text: "shadcn_tabs",
 						Link: "/pages/shadcn_tabs",
+						Type: model.TypeStory,
+					},
+					{
+						Text: "shadcn_textarea",
+						Link: "/pages/shadcn_textarea",
 						Type: model.TypeStory,
 					},
 				},
