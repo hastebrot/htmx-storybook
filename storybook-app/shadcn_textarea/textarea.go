@@ -1,4 +1,4 @@
-package shadcn_input
+package shadcn_textarea
 
 import (
 	g "github.com/maragudk/gomponents"
@@ -8,17 +8,16 @@ import (
 	"storybook-app/shadcn_label"
 )
 
-type InputProps struct {
-	Type        string
+type TextareaProps struct {
 	Placeholder string
 	Value       string
 	IsDisabled  bool
 }
 
-func Input(props InputProps) g.Node {
-	return h.Input(
+func Textarea(props TextareaProps) g.Node {
+	return h.Textarea(
 		Classes(
-			h.Class("flex h-10 w-full rounded-md"),
+			h.Class("flex min-h-[80px] w-full rounded-md "),
 			h.Class("border border-[#E4E4E7] bg-[#FFFFFF]"),
 			h.Class("px-3 py-2 text-sm"),
 			h.Class("file:border-0 file:bg-transparent file:text-sm file:font-medium"),
@@ -27,52 +26,29 @@ func Input(props InputProps) g.Node {
 		),
 		g.If(props.IsDisabled, h.Disabled()),
 		g.If(props.Value != "", h.Value(props.Value)),
-		h.Type(props.Type),
 		h.Placeholder(props.Placeholder),
 	)
 }
 
-func StoryInput() g.Node {
+func StoryTextarea() g.Node {
 	return h.Div(
 		story(
-			h.Div(h.Class("grid w-full max-w-sm items-center gap-1.5"),
+			h.Div(h.Class("grid w-full gap-1.5"),
 				shadcn_label.Label(shadcn_label.LabelProps{
-					Text: "Username",
+					Text: "Your message",
 				}),
-				Input(InputProps{
-					Type:        "text",
-					Placeholder: "Username",
+				Textarea(TextareaProps{
+					Placeholder: "Type your message here.",
 				}),
 			),
 		),
 		story(
-			h.Div(h.Class("grid w-full max-w-sm items-center gap-1.5"),
+			h.Div(h.Class("grid w-full gap-1.5"),
 				shadcn_label.Label(shadcn_label.LabelProps{
-					Text: "Password",
+					Text: "Your message",
 				}),
-				Input(InputProps{
-					Type:        "password",
-					Placeholder: "Password",
-					Value:       "password",
-				}),
-			),
-		),
-		story(
-			h.Div(h.Class("grid w-full max-w-sm items-center gap-1.5"),
-				shadcn_label.Label(shadcn_label.LabelProps{
-					Text: "Email",
-				}),
-				Input(InputProps{
-					Type:        "email",
-					Placeholder: "Email",
-				}),
-			),
-		),
-		story(
-			h.Div(h.Class("grid w-full max-w-sm items-center gap-1.5"),
-				Input(InputProps{
-					Type:        "text",
-					Placeholder: "Disabled",
+				Textarea(TextareaProps{
+					Placeholder: "Type your message here.",
 					IsDisabled:  true,
 				}),
 			),
