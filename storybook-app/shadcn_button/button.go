@@ -8,8 +8,9 @@ import (
 )
 
 type ButtonProps struct {
-	Text    string
-	Variant ButtonVariant
+	Text       string
+	Variant    ButtonVariant
+	IsDisabled bool
 }
 
 type ButtonVariant int
@@ -49,35 +50,69 @@ func Button(props ButtonProps) g.Node {
 			h.Class("text-[#09090B] hover:text-[#18181B] hover:underline"),
 		),
 	),
+		g.If(props.IsDisabled, h.Disabled()),
 		g.Text(props.Text),
 	)
 }
 
 func StoryButton() g.Node {
-	return story(
-		Button(ButtonProps{
-			Text: "Button",
-		}),
-		Button(ButtonProps{
-			Text:    "Button",
-			Variant: ButtonVariantSecondary,
-		}),
-		Button(ButtonProps{
-			Text:    "Button",
-			Variant: ButtonVariantDestructive,
-		}),
-		Button(ButtonProps{
-			Text:    "Button",
-			Variant: ButtonVariantOutline,
-		}),
-		Button(ButtonProps{
-			Text:    "Button",
-			Variant: ButtonVariantGhost,
-		}),
-		Button(ButtonProps{
-			Text:    "Button",
-			Variant: ButtonVariantLink,
-		}),
+	return h.Div(
+		story(
+			Button(ButtonProps{
+				Text: "Button",
+			}),
+			Button(ButtonProps{
+				Text:    "Button",
+				Variant: ButtonVariantSecondary,
+			}),
+			Button(ButtonProps{
+				Text:    "Button",
+				Variant: ButtonVariantDestructive,
+			}),
+			Button(ButtonProps{
+				Text:    "Button",
+				Variant: ButtonVariantOutline,
+			}),
+			Button(ButtonProps{
+				Text:    "Button",
+				Variant: ButtonVariantGhost,
+			}),
+			Button(ButtonProps{
+				Text:    "Button",
+				Variant: ButtonVariantLink,
+			}),
+		),
+		story(
+			Button(ButtonProps{
+				Text:       "Button",
+				IsDisabled: true,
+			}),
+			Button(ButtonProps{
+				Text:       "Button",
+				Variant:    ButtonVariantSecondary,
+				IsDisabled: true,
+			}),
+			Button(ButtonProps{
+				Text:       "Button",
+				Variant:    ButtonVariantDestructive,
+				IsDisabled: true,
+			}),
+			Button(ButtonProps{
+				Text:       "Button",
+				Variant:    ButtonVariantOutline,
+				IsDisabled: true,
+			}),
+			Button(ButtonProps{
+				Text:       "Button",
+				Variant:    ButtonVariantGhost,
+				IsDisabled: true,
+			}),
+			Button(ButtonProps{
+				Text:       "Button",
+				Variant:    ButtonVariantLink,
+				IsDisabled: true,
+			}),
+		),
 	)
 }
 

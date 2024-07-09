@@ -8,8 +8,9 @@ import (
 )
 
 type SwitchProps struct {
-	Text      string
-	IsChecked bool
+	Text       string
+	IsChecked  bool
+	IsDisabled bool
 }
 
 func Switch(props SwitchProps) g.Node {
@@ -20,9 +21,17 @@ func Switch(props SwitchProps) g.Node {
 				Class("peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full"),
 				Class("border-2 border-transparent transition-colors"),
 				Class("disabled:cursor-not-allowed disabled:opacity-50"),
+				g.If(props.IsDisabled,
+					Class("!cursor-not-allowed opacity-50"),
+				),
 				Class("bg-[#E4E4E7] [&:has(input:checked)]:bg-[#18181B]"),
 			),
-			Input(Class("hidden peer"), Type("checkbox"), g.If(props.IsChecked, Checked())),
+			g.If(props.IsDisabled, Disabled()),
+			Input(Class("hidden peer"),
+				Type("checkbox"),
+				g.If(props.IsDisabled, Disabled()),
+				g.If(props.IsChecked, Checked()),
+			),
 			Span(Classes(
 				Class("pointer-events-none block h-5 w-5 rounded-full"),
 				Class("bg-[#FFFFFF] shadow-lg ring-0"),
@@ -43,11 +52,21 @@ func StorySwitch() g.Node {
 				Text:      "Label",
 				IsChecked: false,
 			}),
-		),
-		story(
 			Switch(SwitchProps{
 				Text:      "Label",
 				IsChecked: true,
+			}),
+		),
+		story(
+			Switch(SwitchProps{
+				Text:       "Label",
+				IsChecked:  false,
+				IsDisabled: true,
+			}),
+			Switch(SwitchProps{
+				Text:       "Label",
+				IsChecked:  true,
+				IsDisabled: true,
 			}),
 		),
 	)
@@ -55,7 +74,7 @@ func StorySwitch() g.Node {
 
 func story(children ...g.Node) g.Node {
 	return Div(
-		Class("flex min-h-[150px] w-full items-start justify-center p-10"),
+		Class("flex min-h-[150px] w-full items-start justify-center p-10 gap-10"),
 		g.Group(children),
 	)
 }
